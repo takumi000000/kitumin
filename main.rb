@@ -455,7 +455,6 @@ end
     background_s9.draw()
 
       story10()
-
       chapter = 0 if @cnt == 7
       $musics[$sel_music].stop() if @cnt == 6
 
