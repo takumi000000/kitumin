@@ -1,15 +1,11 @@
 #++
-#操作キャラクタークラス
-#
+# メインキャラクタークラス
 #+----------------------------++
 class MainCharcter < Sprite
   attr_accessor :power, :defhp, :hp 
-  # <!>きつつき画像(スキン変更で[a..b]を変更できる機能を追加する)↓<!>
+  # きつつき画像(スキン変更)
   @@images_w = Image.loadTiles("./images/main_character5.png", 3, 4)[9..10] # 4.png[ism=3..5,  inou=6..8, ryo=9..10]
 
-  #++
-  #コンストラクタ
-  #+----------------------------++
   def initialize()
     # <!>きつつきの位置調整をする↓<!>
       self.x = 500
