@@ -3,11 +3,19 @@ require './action/save'
 require './action/musics'
 require './action/write_name'
 require './sprits/main_character'
+require './story/story1'
+require './story/story2'
+require './story/story3'
+require './story/story4'
+require './story/story5'
+require './story/story6'
+require './story/story7'
+require './story/story8'
+require './story/story9'
+require './story/story10'
 
-# (--1- やってほしいこと -1--) ... 1年生にやってほしいところ
 
-# <!>画面サイズ(一応フルサイズ)↓<!>
-# ---------要相談-------------------
+# 画面サイズ(一応フルサイズ)
 Window.height = 1080
 Window.width = 1280
 
@@ -21,6 +29,7 @@ mouse = Sprite.new(0, 0, Image.new(1, 1))
 # フォントサイズ
 font = Font.new(160)
 font2 = Font.new(50)
+$font = Font.new(50)
 
 # ユーザーネーム
 @userName = " "
@@ -44,11 +53,11 @@ btn_timer.scale_y = 0.3
 btn_timer.z = +1
 
 btn_setting = Sprite.new(300, 0, Image.load("images/setting.png"))
-btn_setting.scale_x = 1
-btn_setting.scale_y = 1
+btn_setting.scale_x = 0.3
+btn_setting.scale_y = 0.3
 btn_setting.z = +2
 
-# +--------------------------------------------------------------------------
+#+--------------------------------------------------------------------------
 
 # chapter 1 (ストーリー) +----------------------------------------------------
 @cnt = 0
@@ -220,18 +229,16 @@ end
   # マウスカーソルのクリックの衝突判定<！>衝突判定を細かく設定
   if !mouse.check(btn_story).empty?
     # chapterを移動する
-     if Input.mousePush?(M_LBUTTON)
-      chapter = 1
-    end
+      chapter = 1 if Input.mousePush?(M_LBUTTON)
   end
 
   if !mouse.check(btn_timer).empty?
     # chapterを移動する
     chapter = 5 if Input.mousePush?(M_LBUTTON)
-    # $musics[$sel_music].stop()
   end
 
   if !mouse.check(btn_setting).empty?
+    # chapterを移動する
     chapter = 4 if Input.mousePush?(M_LBUTTON)
   end
 
@@ -261,15 +268,13 @@ end
         @cnt += 1
       end
 
-
     background_s1.draw()
+      
+      story1()
 
-      # ストーリー１(--１- あとでx, yを調整 -１--)
-      Window.draw_font_ex(200,950, "「おはよう　きつみんだよ！」", font2, color: C_WHITE) if @cnt == 1
-      Window.draw_font_ex(200,950, "「寝起きだからご飯を食べよう。」", font2, color: C_WHITE) if @cnt == 2
-      chapter = 2 if @cnt == 3
-      @cnt = 0 if @cnt == 3
-      $musics[$sel_music].stop() if @cnt == 3
+      chapter = 2 if @cnt == 4
+      @cnt = 0 if @cnt == 4
+      $musics[$sel_music].stop() if @cnt == 4
 
       obje_x = 250
       obje_y = -50
@@ -283,14 +288,11 @@ end
         @cnt += 1
       end
 
-
     background_s1.draw()
+
+    story2()
       
-      # ストーリー2(--１- あとでx, yを調整 -１--)
-      Window.draw_font_ex(200,950, "おなかいっぱいになったきつみんは巣へ帰ろうとした。", font2, color: C_WHITE) if @cnt == 1
-      Window.draw_font_ex(200,950, "しかし、巣への帰る途中罠にかかった。", font2, color: C_WHITE) if @cnt == 2
-      Window.draw_font_ex(200,950, "途方に暮れていたところ、木こりがやってきて助けてくれた。", font2, color: C_WHITE) if @cnt == 3
-      Window.draw_font_ex(200,950, "きつみんは木こりへの恩返しで木を切ることにした。", font2, color: C_WHITE) if @cnt == 4
+
       chapter = 2 if @cnt == 5
       @cnt = 0 if @cnt == 5
       $musics[$sel_music].stop() if @cnt == 5
@@ -310,13 +312,8 @@ end
       
     background_s3.draw()
 
-      # ストーリー3(--１- あとでx, yを調整 -１--)
-      Window.draw_font_ex(200,950, "木こりの友達の建設社長が、木こりのきつつきの話を聞いて", font2, color: C_WHITE) if @cnt == 1
-      Window.draw_font_ex(200,950, "手を貸してほしいと相談してきた。", font2, color: C_WHITE) if @cnt == 2
-      Window.draw_font_ex(200,950, "社長は田舎にダムを作るため町民と土地権争いをしているのだが、", font2, color: C_WHITE) if @cnt == 3
-      Window.draw_font_ex(200,950, "そこには神の祀られている岩があった。", font2, color: C_WHITE) if @cnt == 4
-      Window.draw_font_ex(200,950, "その岩を壊してほしいとのことだ。", font2, color: C_WHITE) if @cnt == 5
-      Window.draw_font_ex(150,950, "きつみんは気が進まなかったが、木こりの頼みだったのでしかたなく引き受けた。", font2, color: C_WHITE) if @cnt == 6
+    story3()
+
       chapter = 2 if @cnt == 7
       @cnt = 0 if @cnt == 7
       $musics[$sel_music].stop() if @cnt == 7
@@ -336,13 +333,8 @@ end
     background_s4.draw()
 
       # ストーリー3(--１- あとでx, yを調整 -１--)
-      Window.draw_font_ex(200,950, "岩を壊された町民はきつみんを破壊神として恐れた。", font2, color: C_WHITE) if @cnt == 1
-      Window.draw_font_ex(200,950, "きつみんは深く傷つき木こりの元へと向かった。", font2, color: C_WHITE) if @cnt == 2
-      Window.draw_font_ex(200,950, "帰ったきつみんは木こりが居ないことに気づいた。", font2, color: C_WHITE) if @cnt == 3
-      Window.draw_font_ex(200,950, "木こりは町民にさらわれていた。", font2, color: C_WHITE) if @cnt == 4
-      Window.draw_font_ex(200,950, "きつみんは木こりを助けるため町へもどった。", font2, color: C_WHITE) if @cnt == 5
-      Window.draw_font_ex(200,950, "町はがらんとしていて人が見当たらなかった。", font2, color: C_WHITE) if @cnt == 6
-      Window.draw_font_ex(200,950, "そこで木こりを探すために、手当り次第家を破壊することにした。", font2, color: C_WHITE) if @cnt == 7
+      story4()
+
       chapter = 2 if @cnt == 8
       @cnt = 2 if @cnt == 8
       $musics[$sel_music].stop() if @cnt == 8
@@ -362,8 +354,7 @@ end
     background_s5.draw()
 
       # ストーリー4(--１- あとでx, yを調整 -１--)
-      Window.draw_font_ex(50,950, "どこの家にも木こりは居なかったが、中に居た人がビルにいると言っていた気がした。", font2, color: C_WHITE) if @cnt == 1
-      Window.draw_font_ex(200,950, "きつみんはビルへ向かった。,ビルは町民により占拠されていた。", font2, color: C_WHITE) if @cnt == 2
+      story5()
       chapter = 2 if @cnt == 3
       $musics[$sel_music].stop() if @cnt == 3
 
@@ -383,20 +374,8 @@ end
 
     background_s6.draw()
 
-      # ストーリー5(--１- あとでx, yを調整 -１--)
-      Window.draw_font_ex(200,950, "無我夢中になりビルを破壊したきつみんは崩壊したビルの瓦礫に", font2, color: C_WHITE) if @cnt == 1
-      Window.draw_font_ex(200,950, "見覚えのある眼鏡のフレームを見つけた。", font2, color: C_WHITE) if @cnt == 2
-      Window.draw_font_ex(200,950, "木こりの使っていた眼鏡だった。", font2, color: C_WHITE) if @cnt == 3
-      Window.draw_font_ex(200,950, "眼鏡は割れていてレンズには鮮血がついていて---,木こりの匂いがした。", font2, color: C_WHITE) if @cnt == 4
-      Window.draw_font_ex(200,950, "辺りを見まわすと生き物はいなく、ただ瓦礫と屍が散乱していた。", font2, color: C_WHITE) if @cnt == 5
-      Window.draw_font_ex(200,950, "自分が引き起こした惨状に戸惑いながらきつみんはその場を去った。", font2, color: C_WHITE) if @cnt == 6
-      Window.draw_font_ex(200,950, "その後、悲しみにくれるきつみんは人間達に八つ当たりをするために", font2, color: C_WHITE) if @cnt == 7
-      Window.draw_font_ex(200,950, "人が集まっている場所へ向かった。", font2, color: C_WHITE) if @cnt == 8
-      Window.draw_font_ex(200,950, "首都についたきつみんは大きなタワーを見つけた。", font2, color: C_WHITE) if @cnt == 9
-      Window.draw_font_ex(200,950, "キラキラしていて中に人がいた。", font2, color: C_WHITE) if @cnt == 10
-      Window.draw_font_ex(200,950, "その中にはあの建設会社の社長がいた。なぜ生きているのか。", font2, color: C_WHITE) if @cnt == 11
-      Window.draw_font_ex(200,950, "なぜ木こりが死ななければいけなかったのか。", font2, color: C_WHITE) if @cnt == 12
-      Window.draw_font_ex(200,950, "きつみんは怒り狂った。", font2, color: C_WHITE) if @cnt == 13
+      story6()
+      
       chapter += 1 if @cnt == 14
       $musics[$sel_music].stop() if @cnt == 14
 
@@ -415,13 +394,8 @@ end
     background_s7.draw()
 
       # ストーリー6(--１- あとでx, yを調整 -１--)
-      Window.draw_font_ex(200,950, "タワーを破壊し武装軍隊が動いた。", font2, color: C_WHITE) if @cnt == 1
-      Window.draw_font_ex(200,950, "きつみんはその場を去った。", font2, color: C_WHITE) if @cnt == 2
-      Window.draw_font_ex(200,950, "きつみんは飛び続けた。きつみんは逃げ続けた。", font2, color: C_WHITE) if @cnt == 3
-      Window.draw_font_ex(200,950, "きつみんは自分がした事を後悔した。", font2, color: C_WHITE) if @cnt == 4
-      Window.draw_font_ex(200,950, "この世界が悪いと決めつけた。", font2, color: C_WHITE) if @cnt == 5
-      Window.draw_font_ex(200,950, "世界を破壊しようと決意した。", font2, color: C_WHITE) if @cnt == 6
-      Window.draw_font_ex(200,950, "手始めにこの山を破壊してやる。", font2, color: C_WHITE) if @cnt == 7
+      story7()
+
       chapter = 2 if @cnt == 8
       @cnt = 0 if @cnt == 8
       $musics[$sel_music].stop() if @cnt == 8
@@ -440,8 +414,8 @@ end
       
       background_s8.draw()
       
-      # ストーリー7(--１- あとでx, yを調整 -１--)
-      Window.draw_font_ex(200,950, "山が崩れた事もお構い無しにきつみんはつつき続けた。", font2, color: C_WHITE) if @cnt == 1
+      story8()
+
       chapter = 2 if @cnt == 2
       @cnt = 0 if @cnt == 2
       $musics[$sel_music].stop() if @cnt == 2
@@ -460,14 +434,8 @@ end
 
       background_s9.draw()
       
-      # ストーリー8(--１- あとでx, yを調整 -１--)
-      Window.draw_font_ex(200,950, "何も無くなった・・・。", font2, color: C_WHITE) if @cnt == 1
-      Window.draw_font_ex(200,950, "きつみんはいつからきつみんなのか・・・。", font2, color: C_WHITE) if @cnt == 2
-      Window.draw_font_ex(200,950, "思い出した。", font2, color: C_WHITE) if @cnt == 3
-      Window.draw_font_ex(200,950, "木こりから名前を貰ったんだ。", font2, color: C_WHITE) if @cnt == 4
-      Window.draw_font_ex(200,950, "木こりの名は「近藤 勇海」。", font2, color: C_WHITE) if @cnt == 5
-      Window.draw_font_ex(200,950, "そうか前にも会っていたんだね。", font2, color: C_WHITE) if @cnt == 6
-      Window.draw_font_ex(200,950, "世界をやり直すために大きな岩をつつきはじめた。,", font2, color: C_WHITE) if @cnt == 7
+      story9()
+     
       chapter = 2 if @cnt == 8
       @cnt = 0 if @cnt == 8
       $musics[$sel_music].stop() if @cnt == 8
@@ -486,12 +454,9 @@ end
 
     background_s9.draw()
 
-      # ストーリー9(--１- あとでx, yを調整 -１--)
-      Window.draw_font_ex(200,950, "岩はボコボコになり山ができ川ができ海ができた。", font2, color: C_WHITE) if @cnt == 1
-      Window.draw_font_ex(200,950, "新たな生命が始まり疲れ果てたキツツキは目を閉じた。", font2, color: C_WHITE) if @cnt == 2
-      Window.draw_font_ex(200,950, "「イサミンまた会えたらいいな」,", font2, color: C_WHITE) if @cnt == 3
-      Window.draw_font_ex(600,850, "Fin", font, color: C_WHITE) if @cnt == 5
-      chapter = 0 if @cnt == 6
+      story10()
+
+      chapter = 0 if @cnt == 7
       $musics[$sel_music].stop() if @cnt == 6
 
       obje_x = 250
