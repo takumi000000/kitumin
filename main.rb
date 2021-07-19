@@ -2,6 +2,7 @@ require 'dxruby'
 require './action/save'
 require './action/musics'
 require './action/write_name'
+require './action/music_switch'
 require './sprits/main_character'
 require './story/story1'
 require './story/story2'
@@ -35,9 +36,9 @@ $font = Font.new(50)
 @userName = " "
 
 # 画面遷移
-chapter = 0
+$chapter = 0
 
-# chapter 0 (メインメニュー) +------------------------------------------------
+# $chapter 0 (メインメニュー) +------------------------------------------------
 background0 = Sprite.new(0, 0, Image.load("images/back0.png"))
 
 # (--1- あとでx, yを調整 -１--)
@@ -59,7 +60,7 @@ btn_setting.z = +2
 
 #+--------------------------------------------------------------------------
 
-# chapter 1 (ストーリー) +----------------------------------------------------
+# $chapter 1 (ストーリー) +----------------------------------------------------
 @cnt = 0
 
 background_s1 = Sprite.new(0, 0, Image.load("images/stage1.png"))
@@ -84,7 +85,7 @@ background_s9.z = -1
 
 # +--------------------------------------------------------------------------
 
-# chapter 2 (オフラインゲーム) +----------------------------------------------
+# $chapter 2 (オフラインゲーム) +----------------------------------------------
 # <!>背景画像 ストーリーや画面遷移で変わるようにする↓<!>
 background2 = Sprite.new(0, 0, Image.load("images/back.jpg"))
 background2.z = -1
@@ -176,51 +177,18 @@ hp_bar = Image.new(250, 100).box_fill(0, 0, 250, 32, [250, 250, 250])
 # クリックカウント
 @click = 0
 
-# chapter 4 +-------------------------------------------------------------
+# $chapter 4 +-------------------------------------------------------------
 skin = Sprite.new(50, 300, Image.load("./images/character_select_icon.png"))
 skin.z = +1
 
 # +------------------------------------------------------------------------
 
-music_on = true
+$music_on = true
 $sel_music = 0
 
 Window.loop do
 
-if music_on == true
-  if chapter == 0
-    $musics[0].play()
-  end
-  if $sel_music == 1
-    $musics[1].play()
-  end
-  if $sel_music == 2
-    $musics[2].play()
-  end
-  if $sel_music == 3
-    $musics[3].play()
-  end
-  if $sel_music == 4
-    $musics[4].play()
-  end
-  if $sel_music == 5
-    $musics[5].play()
-  end
-  if $sel_music == 6
-    $musics[6].play()
-  end
-  if $sel_music == 7
-    $musics[7].play()
-  end
-  if $sel_music == 8
-    $musics[8].play()
-  end
-  if $sel_music == 9
-    $musics[9].play()
-  end
-  music_on = false
-end
-
+  music_switch()
 
   mouse.x = Input.mouse_pos_x()
   mouse.y = Input.mouse_pos_y()
@@ -229,21 +197,21 @@ end
   # マウスカーソルのクリックの衝突判定<！>衝突判定を細かく設定
   if !mouse.check(btn_story).empty?
     # chapterを移動する
-      chapter = 1 if Input.mousePush?(M_LBUTTON)
+      $chapter = 1 if Input.mousePush?(M_LBUTTON)
   end
 
   if !mouse.check(btn_timer).empty?
     # chapterを移動する
-    chapter = 5 if Input.mousePush?(M_LBUTTON)
+    $chapter = 5 if Input.mousePush?(M_LBUTTON)
   end
 
   if !mouse.check(btn_setting).empty?
     # chapterを移動する
-    chapter = 4 if Input.mousePush?(M_LBUTTON)
+    $chapter = 4 if Input.mousePush?(M_LBUTTON)
   end
 
 
-  case chapter
+  case $chapter
   when 0
     background0.draw()
     Window.draw_font_ex(340,100,"きつみん", font, color: C_WHITE)
@@ -253,10 +221,10 @@ end
     
 
     # コーディング用(後で消す) +---------
-    chapter = 1 if Input.key_push?(K_1)
-    chapter = 2 if Input.key_push?(K_2)
-    chapter = 4 if Input.key_push?(K_4)
-    chapter = 5 if Input.key_push?(K_5)
+    $chapter = 1 if Input.key_push?(K_1)
+    $chapter = 2 if Input.key_push?(K_2)
+    $chapter = 4 if Input.key_push?(K_4)
+    $chapter = 5 if Input.key_push?(K_5)
     #  +--------------------------------
     
 
@@ -272,7 +240,7 @@ end
       
       story1()
 
-      chapter = 2 if @cnt == 4
+      $chapter = 2 if @cnt == 4
       @cnt = 0 if @cnt == 4
       $musics[$sel_music].stop() if @cnt == 4
 
@@ -293,7 +261,7 @@ end
     story2()
       
 
-      chapter = 2 if @cnt == 5
+      $chapter = 2 if @cnt == 5
       @cnt = 0 if @cnt == 5
       $musics[$sel_music].stop() if @cnt == 5
 
@@ -314,7 +282,7 @@ end
 
     story3()
 
-      chapter = 2 if @cnt == 7
+      $chapter = 2 if @cnt == 7
       @cnt = 0 if @cnt == 7
       $musics[$sel_music].stop() if @cnt == 7
 
@@ -335,7 +303,7 @@ end
       # ストーリー3(--１- あとでx, yを調整 -１--)
       story4()
 
-      chapter = 2 if @cnt == 8
+      $chapter = 2 if @cnt == 8
       @cnt = 2 if @cnt == 8
       $musics[$sel_music].stop() if @cnt == 8
       
@@ -355,7 +323,7 @@ end
 
       # ストーリー4(--１- あとでx, yを調整 -１--)
       story5()
-      chapter = 2 if @cnt == 3
+      $chapter = 2 if @cnt == 3
       $musics[$sel_music].stop() if @cnt == 3
 
       obje_x = 200
@@ -376,7 +344,7 @@ end
 
       story6()
       
-      chapter += 1 if @cnt == 14
+      $chapter += 1 if @cnt == 14
       $musics[$sel_music].stop() if @cnt == 14
 
       obje_x = 200
@@ -396,7 +364,7 @@ end
       # ストーリー6(--１- あとでx, yを調整 -１--)
       story7()
 
-      chapter = 2 if @cnt == 8
+      $chapter = 2 if @cnt == 8
       @cnt = 0 if @cnt == 8
       $musics[$sel_music].stop() if @cnt == 8
 
@@ -416,7 +384,7 @@ end
       
       story8()
 
-      chapter = 2 if @cnt == 2
+      $chapter = 2 if @cnt == 2
       @cnt = 0 if @cnt == 2
       $musics[$sel_music].stop() if @cnt == 2
 
@@ -436,7 +404,7 @@ end
       
       story9()
      
-      chapter = 2 if @cnt == 8
+      $chapter = 2 if @cnt == 8
       @cnt = 0 if @cnt == 8
       $musics[$sel_music].stop() if @cnt == 8
       
@@ -455,7 +423,7 @@ end
     background_s9.draw()
 
       story10()
-      chapter = 0 if @cnt == 7
+      $chapter = 0 if @cnt == 7
       $musics[$sel_music].stop() if @cnt == 6
 
       obje_x = 250
@@ -468,10 +436,10 @@ end
 
     
     # コーディング用(後で消す) +----------
-    chapter = 0 if Input.key_push?(K_0)
-    chapter = 2 if Input.key_push?(K_2)
-    chapter = 4 if Input.key_push?(K_4)
-    chapter = 5 if Input.key_push?(K_5)
+    $chapter = 0 if Input.key_push?(K_0)
+    $chapter = 2 if Input.key_push?(K_2)
+    $chapter = 4 if Input.key_push?(K_4)
+    $chapter = 5 if Input.key_push?(K_5)
     # +---------------------------------
   when 2
     @cnt = 0
@@ -496,7 +464,7 @@ end
           @click += 1 if Input.mousePush?(M_LBUTTON)
           if @click == 2
           sleep(3)
-          chapter = 3
+          $chapter = 3
           @click = 0
           end
         else
@@ -505,10 +473,10 @@ end
     
 
     # コーディング用(後で消す) +---------
-    chapter = 0 if Input.key_push?(K_0)
-    chapter = 1 if Input.key_push?(K_1)
-    chapter = 4 if Input.key_push?(K_4)
-    chapter = 5 if Input.key_push?(K_5)
+    $chapter = 0 if Input.key_push?(K_0)
+    $chapter = 1 if Input.key_push?(K_1)
+    $chapter = 4 if Input.key_push?(K_4)
+    $chapter = 5 if Input.key_push?(K_5)
     # +---------------------------------
 
   when 3
@@ -527,8 +495,8 @@ end
         end
       end
       $sel_music = $sel_music.to_i + 1
-      music_on = true
-      chapter = 1
+      $music_on = true
+      $chapter = 1
     end
     if Input.key_push?(K_N)
       File.open("./action/.save", "r+", encoding: "utf-8") do |file|
@@ -543,8 +511,8 @@ end
       end
       $story = @load
       $sel_music = $sel_music.to_i + 1
-      music_on = true
-    chapter = 0
+      $music_on = true
+    $chapter = 0
     end
   
   when 4
@@ -566,10 +534,10 @@ end
 
     
     # コーディング用(後で消す) +---------
-    chapter = 1 if Input.key_push?(K_1)
-    chapter = 2 if Input.key_push?(K_2)
-    chapter = 3 if Input.key_push?(K_3)
-    chapter = 5 if Input.key_push?(K_5)
+    $chapter = 1 if Input.key_push?(K_1)
+    $chapter = 2 if Input.key_push?(K_2)
+    $chapter = 3 if Input.key_push?(K_3)
+    $chapter = 5 if Input.key_push?(K_5)
     #  +--------------------------------
 
   when 5
@@ -585,7 +553,7 @@ end
     print "#{name} としてログイン"
   end
   main_char.hp = 1000.0
-  chapter = 6
+  $chapter = 6
   end
     Window.draw_font_ex(100,100, "名前を入力してください", font2, color: C_WHITE)
     Window.draw_font_ex(100,150, "Enterで決定", font2, color: C_WHITE)
