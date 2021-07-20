@@ -15,11 +15,9 @@ require './story/story8'
 require './story/story9'
 require './story/story10'
 
-
 # 画面サイズ(一応フルサイズ)
 Window.height = 1080
 Window.width = 1280
-
 
 # 真ん中を定義
 center = {:w => (Window.width / 2), :h => (Window.height / 2)}
@@ -30,6 +28,7 @@ mouse = Sprite.new(0, 0, Image.new(1, 1))
 # フォントサイズ
 font = Font.new(160)
 font2 = Font.new(50)
+font3 = Font.new(100)
 $font = Font.new(50)
 
 # ユーザーネーム
@@ -38,7 +37,6 @@ $font = Font.new(50)
 # 画面遷移
 $chapter = 0
 
-# $chapter 0 (メインメニュー) +------------------------------------------------
 background0 = Sprite.new(0, 0, Image.load("images/back0.png"))
 
 # (--1- あとでx, yを調整 -１--)
@@ -58,9 +56,20 @@ btn_setting.scale_x = 0.3
 btn_setting.scale_y = 0.3
 btn_setting.z = +2
 
-#+--------------------------------------------------------------------------
+# タイムアタック
+atk_start = -1
 
-# $chapter 1 (ストーリー) +----------------------------------------------------
+@byou = 0
+@byou_cnt = 0
+
+@flo1_byou = 0
+@flo1_byou_cnt = 0
+
+@flo2_byou = 0
+@flo2_byou_cnt = 0
+
+
+# ストーリー別背景
 @cnt = 0
 
 background_s1 = Sprite.new(0, 0, Image.load("images/stage1.png"))
@@ -82,13 +91,6 @@ background_s8.z = -1
 background_s9 = Sprite.new(0, 0, Image.load("images/背景8,9宇宙.png"))
 background_s9.z = -1
 
-
-# +--------------------------------------------------------------------------
-
-# $chapter 2 (オフラインゲーム) +----------------------------------------------
-# <!>背景画像 ストーリーや画面遷移で変わるようにする↓<!>
-background2 = Sprite.new(0, 0, Image.load("images/back.jpg"))
-background2.z = -1
 
 # きつつき
 main_char = MainCharcter.new()
@@ -177,13 +179,13 @@ hp_bar = Image.new(250, 100).box_fill(0, 0, 250, 32, [250, 250, 250])
 # クリックカウント
 @click = 0
 
-# $chapter 4 +-------------------------------------------------------------
+# $chapter 4
 skin = Sprite.new(50, 300, Image.load("./images/character_select_icon.png"))
 skin.z = +1
 
-# +------------------------------------------------------------------------
 
 $music_on = true
+
 $sel_music = 0
 
 Window.loop do
@@ -194,43 +196,42 @@ Window.loop do
   mouse.y = Input.mouse_pos_y()
 
 
-  # マウスカーソルのクリックの衝突判定<！>衝突判定を細かく設定
-  if !mouse.check(btn_story).empty?
-    # chapterを移動する
-      $chapter = 1 if Input.mousePush?(M_LBUTTON)
-  end
-
-  if !mouse.check(btn_timer).empty?
-    # chapterを移動する
-    $chapter = 5 if Input.mousePush?(M_LBUTTON)
-  end
-
-  if !mouse.check(btn_setting).empty?
-    # chapterを移動する
-    $chapter = 4 if Input.mousePush?(M_LBUTTON)
+  # マウスカーソルのモードクリックの衝突判定
+  if $chapter == 0
+    if !mouse.check(btn_story).empty?
+      # chapterを移動する
+        $chapter = 1 if Input.mousePush?(M_LBUTTON)
+    end
+  
+    if !mouse.check(btn_timer).empty?
+      # chapterを移動する
+      $chapter = 5 if Input.mousePush?(M_LBUTTON)
+    end
+  
+    if !mouse.check(btn_setting).empty?
+      # chapterを移動する
+      $chapter = 4 if Input.mousePush?(M_LBUTTON)
+    end
   end
 
 
   case $chapter
-  when 0
+  when 0    # $chapter
     background0.draw()
     Window.draw_font_ex(340,100,"きつみん", font, color: C_WHITE)
     btn_story.draw()
     btn_timer.draw()
     
-    
-
     # コーディング用(後で消す) +---------
     $chapter = 1 if Input.key_push?(K_1)
     $chapter = 2 if Input.key_push?(K_2)
     $chapter = 4 if Input.key_push?(K_4)
     $chapter = 5 if Input.key_push?(K_5)
     #  +--------------------------------
-    
 
-  when 1
+  when 1    # $chapter
     case $story
-    when 1
+    when 1    # $story
       main_char.hp = 100.0 # 破壊オブジェクトのHP
       if Input.mousePush?(M_LBUTTON)
         @cnt += 1
@@ -238,7 +239,7 @@ Window.loop do
 
     background_s1.draw()
       
-      story1()
+    story1()
 
       $chapter = 2 if @cnt == 4
       @cnt = 0 if @cnt == 4
@@ -250,7 +251,7 @@ Window.loop do
       object2 = Sprite.new(obje_x, obje_y, Image.load("images/stage1-2木2.png"))
       main_char.z = +1
 
-  when 2
+  when 2    # $story
     main_char.hp = 100.0
       if Input.mousePush?(M_LBUTTON)
         @cnt += 1
@@ -271,13 +272,12 @@ Window.loop do
       object2 = Sprite.new(obje_x, obje_y, Image.load("images/stage2-2木.png"))
       main_char.z = +1
       
-    when 3
+    when 3    # $story
       main_char.hp = 100.0
       if Input.mousePush?(M_LBUTTON)
       @cnt += 1
       end
 
-      
     background_s3.draw()
 
     story3()
@@ -292,7 +292,7 @@ Window.loop do
       object2 = Sprite.new(obje_x, obje_y, Image.load("images/stage3-2岩.png"))
       main_char.z = +1
       
-    when 4
+    when 4    # $story
       main_char.hp = 100.0
       if Input.mousePush?(M_LBUTTON)
         @cnt += 1
@@ -300,8 +300,7 @@ Window.loop do
       
     background_s4.draw()
 
-      # ストーリー3(--１- あとでx, yを調整 -１--)
-      story4()
+    story4()
 
       $chapter = 2 if @cnt == 8
       @cnt = 2 if @cnt == 8
@@ -313,7 +312,7 @@ Window.loop do
       object2 = Sprite.new(obje_x, obje_y, Image.load("images/stage4-2家.png"))
       main_char.z = +1
       
-    when 5
+    when 5    # $story
       main_char.hp = 100.0
       if Input.mousePush?(M_LBUTTON)
         @cnt += 1
@@ -321,8 +320,8 @@ Window.loop do
 
     background_s5.draw()
 
-      # ストーリー4(--１- あとでx, yを調整 -１--)
-      story5()
+    story5()
+
       $chapter = 2 if @cnt == 3
       $musics[$sel_music].stop() if @cnt == 3
 
@@ -334,7 +333,7 @@ Window.loop do
 
 
       
-    when 6
+    when 6    # $story
       main_char.hp = 100.0
       if Input.mousePush?(M_LBUTTON)
         @cnt += 1
@@ -342,7 +341,7 @@ Window.loop do
 
     background_s6.draw()
 
-      story6()
+    story6()
       
       $chapter += 1 if @cnt == 14
       $musics[$sel_music].stop() if @cnt == 14
@@ -353,7 +352,7 @@ Window.loop do
       object2 = Sprite.new(obje_x, obje_y, Image.load("images/stage6-2スカイツリー.png"))
       main_char.z = +1
       
-    when 7
+    when 7    # $story
       main_char.hp = 100.0
       if Input.mousePush?(M_LBUTTON)
         @cnt += 1
@@ -361,8 +360,7 @@ Window.loop do
 
     background_s7.draw()
 
-      # ストーリー6(--１- あとでx, yを調整 -１--)
-      story7()
+    story7()
 
       $chapter = 2 if @cnt == 8
       @cnt = 0 if @cnt == 8
@@ -374,15 +372,15 @@ Window.loop do
       object2 = Sprite.new(obje_x, obje_y, Image.load("images/stage7-2山.png"))
       main_char.z = +1
       
-    when 8
+    when 8    # $story
       main_char.hp = 100.0
       if Input.mousePush?(M_LBUTTON)
         @cnt += 1
       end
       
-      background_s8.draw()
+    background_s8.draw()
       
-      story8()
+    story8()
 
       $chapter = 2 if @cnt == 2
       @cnt = 0 if @cnt == 2
@@ -394,15 +392,15 @@ Window.loop do
       object2 = Sprite.new(obje_x, obje_y, Image.load("images/stage8-2地球.png"))
       main_char.z = +1
       
-    when 9
+    when 9    # $story
       main_char.hp = 100.0
       if Input.mousePush?(M_LBUTTON)
         @cnt += 1
       end
 
-      background_s9.draw()
+    background_s9.draw()
       
-      story9()
+    story9()
      
       $chapter = 2 if @cnt == 8
       @cnt = 0 if @cnt == 8
@@ -414,7 +412,7 @@ Window.loop do
       object2 = Sprite.new(obje_x, obje_y, Image.load("images/stage9-2隕石.png"))
       main_char.z = +1
 
-    when 10
+    when 10    # $story
       main_char.hp = 100.0
       if Input.mousePush?(M_LBUTTON)
         @cnt += 1
@@ -422,7 +420,8 @@ Window.loop do
 
     background_s9.draw()
 
-      story10()
+    story10()
+
       $chapter = 0 if @cnt == 7
       $musics[$sel_music].stop() if @cnt == 6
 
@@ -434,14 +433,14 @@ Window.loop do
 
     end
 
-    
     # コーディング用(後で消す) +----------
     $chapter = 0 if Input.key_push?(K_0)
     $chapter = 2 if Input.key_push?(K_2)
     $chapter = 4 if Input.key_push?(K_4)
     $chapter = 5 if Input.key_push?(K_5)
     # +---------------------------------
-  when 2
+
+  when 2    # $chapter
     @cnt = 0
     main_char.move()
 
@@ -456,21 +455,20 @@ Window.loop do
     background_s9.draw() if $story == 9
     background_s9.draw() if $story == 10
 
-        # 250 == 横幅 ＝＞ 小さくしていってサイズを短くしていく
-        Window.draw(0, 0, hp_bar)
-        Window.draw_box_fill(0, 0, 250 * (main_char.hp / main_char.defhp.to_f), 32, [255, 0, 0])
-        if main_char.hp / main_char.defhp.to_f < 0
-          object2.draw
-          @click += 1 if Input.mousePush?(M_LBUTTON)
-          if @click == 2
+    # 250 == 横幅 ＝＞ 小さくしていってサイズを短くしていく
+    Window.draw(0, 0, hp_bar)
+    Window.draw_box_fill(0, 0, 250 * (main_char.hp / main_char.defhp.to_f), 32, [255, 0, 0])
+    if main_char.hp / main_char.defhp.to_f < 0
+      object2.draw
+      @click += 1 if Input.mousePush?(M_LBUTTON)
+        if @click == 2
           sleep(3)
           $chapter = 3
           @click = 0
-          end
-        else
-          object.draw
         end
-    
+    else
+      object.draw
+    end
 
     # コーディング用(後で消す) +---------
     $chapter = 0 if Input.key_push?(K_0)
@@ -479,7 +477,7 @@ Window.loop do
     $chapter = 5 if Input.key_push?(K_5)
     # +---------------------------------
 
-  when 3
+  when 3    # $chapter
     $musics[$sel_music].stop()
     Window.draw_font_ex(200,950, "続けますか？「y」or「n」", font2, color: C_WHITE)
     if Input.key_push?(K_Y)
@@ -515,11 +513,12 @@ Window.loop do
     $chapter = 0
     end
   
-  when 4
+  when 4    # $chapter
   main_char.x = 1350
   main_char.y = 430
   skinfont = Font.new(60)
   Window.draw_font_ex(1180, 200, "現在適用されているスキン", skinfont)
+
   # 画面に画像を配置
   skin = Image.loadTiles("./images/main_character5.png", 3, 4)
 
@@ -531,7 +530,6 @@ Window.loop do
   if !selected_skin.empty? && Input.mouse_push?(M_LBUTTON)
     main_char.change_skin(skins.index(selected_skin.first))
   end
-
     
     # コーディング用(後で消す) +---------
     $chapter = 1 if Input.key_push?(K_1)
@@ -540,7 +538,7 @@ Window.loop do
     $chapter = 5 if Input.key_push?(K_5)
     #  +--------------------------------
 
-  when 5
+  when 5    # $chapter
 
   write_name()
     
@@ -563,20 +561,72 @@ Window.loop do
       Window.draw_font_ex(740,100, @userName, font2, color: C_GREEN)
     end
 
-  when 6
+  when 6    # $chapter
+
     # タイムアタック
-    Window.draw_font_ex(800,150, "sec1", font2, color: C_WHITE)
+    if atk_start == -1
+      atk_start = 0
+    elsif atk_start == 0
+      Window.draw_font_ex(500,150, "3", font, color: C_WHITE)
+      sleep(1)
+      atk_start = 1
+      elsif atk_start == 1
+        Window.draw_font_ex(500,150, "2", font, color: C_WHITE)
+        sleep(1)
+        atk_start = 2
+        elsif atk_start == 2
+          Window.draw_font_ex(500,150, "1", font, color: C_WHITE)
+          sleep(1)
+          atk_start = 3
+          elsif atk_start == 3
+            Window.draw_font_ex(500,150, "スタート", font, color: C_WHITE)
+            sleep(1)
+            atk_start = 4
+    end
+
     @cnt = 0
     main_char.move()
     object.draw
 
-    # 250 == 横幅 ＝＞ 小さくしていってサイズを短くしていく
-    main_char.hp -= 10 if Input.mousePush?(M_LBUTTON)
-    Window.draw(0, 0, hp_bar)
-    Window.draw_box_fill(0, 0, 250 * (main_char.hp / main_char.defhp.to_f), 32, [255, 0, 0])
+    if atk_start == 4
+      unless main_char.hp / main_char.defhp.to_f < 0
+        @byou_cnt += 1
+        if @byou_cnt == 60
+          @byou += 1
+          @byou_cnt = 0
+        end
+
+        @flo1_byou_cnt += 1
+        if @flo1_byou_cnt == 6
+          @flo1_byou += 1
+          @flo1_byou_cnt = 0
+          if @flo1_byou == 10
+            @flo1_byou = 0
+          end
+        end
+
+        @flo2_byou_cnt += 6
+        if @flo2_byou_cnt / 10 == 1
+          @flo2_byou += 1
+          @flo2_byou_cnt = 0
+          if @flo2_byou == 10
+            @flo2_byou = 0
+          end
+        end
+      end
+
+      Window.draw_font_ex(800,150, "#{@byou}.#{@flo1_byou}#{@flo2_byou}", font3, color: C_WHITE)
+
+      # 250 == 横幅 ＝＞ 小さくしていってサイズを短くしていく
+      main_char.hp -= 10 if Input.mousePush?(M_LBUTTON)
+      Window.draw(0, 0, hp_bar)
+      Window.draw_box_fill(0, 0, 250 * (main_char.hp / main_char.defhp.to_f), 32, [255, 0, 0])
+    end
+
     if main_char.hp / main_char.defhp.to_f < 0
     Window.draw_font_ex(100,100, "終了", font2, color: C_WHITE)
-    Window.draw_font_ex(100,150, "クリアタイムは**秒です。", font2, color: C_WHITE)
+    Window.draw_font_ex(100,150, "クリアタイムは#{@byou}.#{@flo1_byou}#{@flo2_byou}です。", font2, color: C_WHITE)
+    atk_start == -1
     end
   end
 
