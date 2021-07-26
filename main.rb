@@ -546,7 +546,6 @@ Window.loop do
     end
 
   when 7    # $chapter
-    $musics[$sel_music].stop()
     Window.draw_font_ex(200,950, "タイムアタックを続けますか？「y」or「n」", font2, color: C_WHITE)
     Window.draw_font_ex(100,150, "クリアタイムは#{@byou}.#{@flo1_byou}#{@flo2_byou}です。", font2, color: C_WHITE)
     main_char.hp = 1000.0
