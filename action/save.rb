@@ -19,3 +19,38 @@ end
 # -----------------------------------------------------
 $story = @load
 @hakai = @load
+
+
+def continue_y
+  File.open("./action/.save", "r+", encoding: "utf-8") do |file|
+    @sto = file.read
+    @save = @sto.to_i + 1
+    File.open("./action/.save", "w+") do |f|
+      f.puts @save.to_i
+      @load = @save.to_i
+      $story = @load
+      puts "save: #{@load}"
+      @hakai += 1
+    end
+  end
+  $sel_music = $sel_music.to_i + 1
+  $music_on = true
+  $chapter = 1
+end
+
+def continue_n
+  File.open("./action/.save", "r+", encoding: "utf-8") do |file|
+    @sto = file.read
+    @save = @sto.to_i + 1
+    File.open("./action/.save", "w+") do |f|
+      f.puts @save.to_i
+      @load = @save.to_i
+      puts "save: #{@load}"
+      @hakai += 1
+    end
+  end
+  $story = @load
+  $sel_music = $sel_music.to_i + 1
+  $music_on = true
+  $chapter = 0
+end

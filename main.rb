@@ -20,9 +20,6 @@ require './story/story10'
 Window.height = 1080
 Window.width = 1280
 
-# 真ん中を定義
-center = {:w => (Window.width / 2), :h => (Window.height / 2)}
-
 # マウスの衝突判定
 mouse = Sprite.new(0, 0, Image.new(1, 1))
 
@@ -223,12 +220,6 @@ Window.loop do
     btn_story.draw()
     btn_timer.draw()
     
-    # コーディング用(後で消す) +---------
-    $chapter = 1 if Input.key_push?(K_1)
-    $chapter = 2 if Input.key_push?(K_2)
-    $chapter = 4 if Input.key_push?(K_4)
-    $chapter = 5 if Input.key_push?(K_5)
-    #  +--------------------------------
 
   when 1    # $chapter
     case $story
@@ -434,13 +425,6 @@ Window.loop do
 
     end
 
-    # コーディング用(後で消す) +----------
-    $chapter = 0 if Input.key_push?(K_0)
-    $chapter = 2 if Input.key_push?(K_2)
-    $chapter = 4 if Input.key_push?(K_4)
-    $chapter = 5 if Input.key_push?(K_5)
-    # +---------------------------------
-
   when 2    # $chapter
     @cnt = 0
     main_char.move()
@@ -471,47 +455,14 @@ Window.loop do
       object.draw
     end
 
-    # コーディング用(後で消す) +---------
-    $chapter = 0 if Input.key_push?(K_0)
-    $chapter = 1 if Input.key_push?(K_1)
-    $chapter = 4 if Input.key_push?(K_4)
-    $chapter = 5 if Input.key_push?(K_5)
-    # +---------------------------------
-
   when 3    # $chapter
     $musics[$sel_music].stop()
     Window.draw_font_ex(200,950, "続けますか？「y」or「n」", font2, color: C_WHITE)
+
     if Input.key_push?(K_Y)
-      File.open("./action/.save", "r+", encoding: "utf-8") do |file|
-        @sto = file.read
-        @save = @sto.to_i + 1
-        File.open("./action/.save", "w+") do |f|
-          f.puts @save.to_i
-          @load = @save.to_i
-          $story = @load
-          puts "save: #{@load}"
-          @hakai += 1
-        end
-      end
-      $sel_music = $sel_music.to_i + 1
-      $music_on = true
-      $chapter = 1
-    end
-    if Input.key_push?(K_N)
-      File.open("./action/.save", "r+", encoding: "utf-8") do |file|
-        @sto = file.read
-        @save = @sto.to_i + 1
-        File.open("./action/.save", "w+") do |f|
-          f.puts @save.to_i
-          @load = @save.to_i
-          puts "save: #{@load}"
-          @hakai += 1
-        end
-      end
-      $story = @load
-      $sel_music = $sel_music.to_i + 1
-      $music_on = true
-    $chapter = 0
+      continue_y()      # // auto save
+    elsif Input.key_push?(K_N)
+      continue_n()      # // auto save
     end
   
   when 4    # $chapter
@@ -531,13 +482,6 @@ Window.loop do
   if !selected_skin.empty? && Input.mouse_push?(M_LBUTTON)
     main_char.change_skin(skins.index(selected_skin.first))
   end
-    
-    # コーディング用(後で消す) +---------
-    $chapter = 1 if Input.key_push?(K_1)
-    $chapter = 2 if Input.key_push?(K_2)
-    $chapter = 3 if Input.key_push?(K_3)
-    $chapter = 5 if Input.key_push?(K_5)
-    #  +--------------------------------
 
   when 5    # $chapter
 
