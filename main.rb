@@ -57,7 +57,7 @@ btn_setting.scale_y = 0.3
 btn_setting.z = +2
 
 # タイムアタック
-atk_start = -1
+@atk_start = -1
 
 @byou = 0
 @byou_cnt = 0
@@ -562,40 +562,40 @@ Window.loop do
     end
 
   when 6    # $chapter
-
+    
     # タイムアタック
-    if atk_start == -1
-      atk_start = 0
-    elsif atk_start == 0
+    if @atk_start == -1
+      @atk_start = 0
+    elsif @atk_start == 0
       Window.draw_font_ex(500,150, "3", font, color: C_WHITE)
       sleep(1)
-      atk_start = 1
-      elsif atk_start == 1
-        Window.draw_font_ex(500,150, "2", font, color: C_WHITE)
-        sleep(1)
-        atk_start = 2
-        elsif atk_start == 2
-          Window.draw_font_ex(500,150, "1", font, color: C_WHITE)
-          sleep(1)
-          atk_start = 3
-          elsif atk_start == 3
-            Window.draw_font_ex(500,150, "スタート", font, color: C_WHITE)
-            sleep(1)
-            atk_start = 4
+      @atk_start = 1
+    elsif @atk_start == 1
+      Window.draw_font_ex(500,150, "2", font, color: C_WHITE)
+      sleep(1)
+      @atk_start = 2
+    elsif @atk_start == 2
+      Window.draw_font_ex(500,150, "1", font, color: C_WHITE)
+      sleep(1)
+      @atk_start = 3
+    elsif @atk_start == 3
+      Window.draw_font_ex(500,150, "スタート", font, color: C_WHITE)
+      sleep(1)
+      @atk_start = 4
     end
-
+    
     @cnt = 0
     main_char.move()
     object.draw
-
-    if atk_start == 4
+    
+    if @atk_start == 4
       unless main_char.hp / main_char.defhp.to_f < 0
         @byou_cnt += 1
         if @byou_cnt == 60
           @byou += 1
           @byou_cnt = 0
         end
-
+        
         @flo1_byou_cnt += 1
         if @flo1_byou_cnt == 6
           @flo1_byou += 1
@@ -604,7 +604,7 @@ Window.loop do
             @flo1_byou = 0
           end
         end
-
+        
         @flo2_byou_cnt += 6
         if @flo2_byou_cnt / 10 == 1
           @flo2_byou += 1
@@ -614,22 +614,62 @@ Window.loop do
           end
         end
       end
-
+      
       Window.draw_font_ex(800,150, "#{@byou}.#{@flo1_byou}#{@flo2_byou}", font3, color: C_WHITE)
-
+      
       # 250 == 横幅 ＝＞ 小さくしていってサイズを短くしていく
-      main_char.hp -= 10 if Input.mousePush?(M_LBUTTON)
+      main_char.hp -= 1 if Input.mousePush?(M_LBUTTON)
       Window.draw(0, 0, hp_bar)
       Window.draw_box_fill(0, 0, 250 * (main_char.hp / main_char.defhp.to_f), 32, [255, 0, 0])
     end
-
+    
     if main_char.hp / main_char.defhp.to_f < 0
-    Window.draw_font_ex(100,100, "終了", font2, color: C_WHITE)
+      Window.draw_font_ex(100,100, "終了", font2, color: C_WHITE)
+      Window.draw_font_ex(100,150, "クリアタイムは#{@byou}.#{@flo1_byou}#{@flo2_byou}です。", font2, color: C_WHITE)
+
+      @time_record = "#{@userName} : #{@byou}.#{@flo1_byou}#{@flo2_byou}"
+      sleep(3)
+      $chapter = 7
+    end
+
+  when 7    # $chapter
+    $musics[$sel_music].stop()
+    Window.draw_font_ex(200,950, "タイムアタックを続けますか？「y」or「n」", font2, color: C_WHITE)
     Window.draw_font_ex(100,150, "クリアタイムは#{@byou}.#{@flo1_byou}#{@flo2_byou}です。", font2, color: C_WHITE)
-    atk_start == -1
+
+    
+    if Input.key_push?(K_Y)
+      $chapter = 6
+      # reset action ----
+      main_char.hp = 1000.0
+      @byou = 0
+      @byou_cnt = 0
+      @flo1_byou = 0
+      @flo1_byou_cnt = 0
+      @flo2_byou = 0
+      @flo2_byou_cnt = 0
+      @atk_start = -1
+      File.open("./action/time_record_log", "a", encoding: "utf-8") do |file|
+        file.puts "#{@time_record}"
+      end
+      
+    elsif Input.key_push?(K_N)
+      $chapter = 0
+      # reset action ----
+      main_char.hp = 1000.0
+      @byou = 0
+      @byou_cnt = 0
+      @flo1_byou = 0
+      @flo1_byou_cnt = 0
+      @flo2_byou = 0
+      @flo2_byou_cnt = 0
+      @atk_start = -1
+      File.open("./action/time_record_log", "a", encoding: "utf-8") do |file|
+        file.puts "#{@time_record}"
+      end
     end
   end
-
+  
   # ESCキーが押されると終了
   break if Input.key_push?(K_ESCAPE)
 end
