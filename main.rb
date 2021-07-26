@@ -66,7 +66,6 @@ btn_setting.z = +2
 @flo2_byou = 0
 @flo2_byou_cnt = 0
 
-
 # ストーリー別背景
 @cnt = 0
 
@@ -89,11 +88,9 @@ background_s8.z = -1
 background_s9 = Sprite.new(0, 0, Image.load("images/背景8,9宇宙.png"))
 background_s9.z = -1
 
-
 # きつつき
 main_char = MainCharcter.new()
 main_char.z = +2
-
 
 if @hakai == 1
 # 破壊対象のオブジェクト ステージ1
@@ -181,7 +178,6 @@ hp_bar = Image.new(250, 100).box_fill(0, 0, 250, 32, [250, 250, 250])
 skin = Sprite.new(50, 300, Image.load("./images/character_select_icon.png"))
 skin.z = +1
 
-
 $music_on = true
 
 $sel_music = 0
@@ -192,7 +188,6 @@ Window.loop do
 
   mouse.x = Input.mouse_pos_x()
   mouse.y = Input.mouse_pos_y()
-
 
   # マウスカーソルのモードクリックの衝突判定
   if $chapter == 0
@@ -212,14 +207,12 @@ Window.loop do
     end
   end
 
-
   case $chapter
   when 0    # $chapter
     background0.draw()
     Window.draw_font_ex(340,100,"きつみん", font, color: C_WHITE)
     btn_story.draw()
     btn_timer.draw()
-    
 
   when 1    # $chapter
     case $story
@@ -252,7 +245,6 @@ Window.loop do
     background_s1.draw()
 
     story2()
-      
 
       $chapter = 2 if @cnt == 5
       @cnt = 0 if @cnt == 5
@@ -323,8 +315,6 @@ Window.loop do
       object2 = Sprite.new(obje_x, obje_y, Image.load("images/stage5-2ビル.png"))
       main_char.z = +1
 
-
-      
     when 6    # $story
       main_char.hp = 100.0
       if Input.mousePush?(M_LBUTTON)
@@ -561,27 +551,23 @@ Window.loop do
     Window.draw_font_ex(100,150, "クリアタイムは#{@byou}.#{@flo1_byou}#{@flo2_byou}です。", font2, color: C_WHITE)
     main_char.hp = 1000.0
 
-    
     if Input.key_push?(K_Y)
       $chapter = 6
-
       # reset action ----
       count_reset()
-      
       File.open("./action/time_record_log", "a", encoding: "utf-8") do |file|
         file.puts "#{@time_record}"
       end
       
     elsif Input.key_push?(K_N)
       $chapter = 0
-
       # reset action ----
       count_reset()
-
       File.open("./action/time_record_log", "a", encoding: "utf-8") do |file|
         file.puts "#{@time_record}"
       end
     end
+
   end
   
   # ESCキーが押されると終了

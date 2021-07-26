@@ -24,7 +24,6 @@ def count_time
   end
 end
 
-
 def count_reset
   @byou = 0
   @byou_cnt = 0

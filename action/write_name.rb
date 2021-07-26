@@ -1,5 +1,5 @@
+# 名前入力 +-----------------
 def write_name
-    # 名前入力
   # 大文字
   if Input.key_down?(K_LSHIFT)
     if Input.key_push?(K_Q)
