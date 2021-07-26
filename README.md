@@ -27,3 +27,6 @@
 - :shower:      不要な機能・使われなくなった機能の削除 (refactor)
 - :green_heart: テストやCIの修正・改善 (test)
 - :up:          依存パッケージなどのアップデート (chore)
+
+
+# :sparkles:TODO : usb kitumin_main git push !!!:sparkles:
