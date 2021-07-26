@@ -3,6 +3,7 @@ require './action/save'
 require './action/musics'
 require './action/write_name'
 require './action/music_switch'
+require './action/time_attack'
 require './sprits/main_character'
 require './story/story1'
 require './story/story2'
@@ -590,30 +591,8 @@ Window.loop do
     
     if @atk_start == 4
       unless main_char.hp / main_char.defhp.to_f < 0
-        @byou_cnt += 1
-        if @byou_cnt == 60
-          @byou += 1
-          @byou_cnt = 0
-        end
-        
-        @flo1_byou_cnt += 1
-        if @flo1_byou_cnt == 6
-          @flo1_byou += 1
-          @flo1_byou_cnt = 0
-          if @flo1_byou == 10
-            @flo1_byou = 0
-          end
-        end
-        
-        @flo2_byou_cnt += 6
-        if @flo2_byou_cnt / 10 == 1
-          @flo2_byou += 1
-          @flo2_byou_cnt = 0
-          if @flo2_byou == 10
-            @flo2_byou = 0
-          end
-        end
-      end
+        count_time()
+    end
       
       Window.draw_font_ex(800,150, "#{@byou}.#{@flo1_byou}#{@flo2_byou}", font3, color: C_WHITE)
       
@@ -636,34 +615,25 @@ Window.loop do
     $musics[$sel_music].stop()
     Window.draw_font_ex(200,950, "タイムアタックを続けますか？「y」or「n」", font2, color: C_WHITE)
     Window.draw_font_ex(100,150, "クリアタイムは#{@byou}.#{@flo1_byou}#{@flo2_byou}です。", font2, color: C_WHITE)
+    main_char.hp = 1000.0
 
     
     if Input.key_push?(K_Y)
       $chapter = 6
+
       # reset action ----
-      main_char.hp = 1000.0
-      @byou = 0
-      @byou_cnt = 0
-      @flo1_byou = 0
-      @flo1_byou_cnt = 0
-      @flo2_byou = 0
-      @flo2_byou_cnt = 0
-      @atk_start = -1
+      count_reset()
+      
       File.open("./action/time_record_log", "a", encoding: "utf-8") do |file|
         file.puts "#{@time_record}"
       end
       
     elsif Input.key_push?(K_N)
       $chapter = 0
+
       # reset action ----
-      main_char.hp = 1000.0
-      @byou = 0
-      @byou_cnt = 0
-      @flo1_byou = 0
-      @flo1_byou_cnt = 0
-      @flo2_byou = 0
-      @flo2_byou_cnt = 0
-      @atk_start = -1
+      count_reset()
+
       File.open("./action/time_record_log", "a", encoding: "utf-8") do |file|
         file.puts "#{@time_record}"
       end
