@@ -4,6 +4,7 @@ require './action/musics'
 require './action/write_name'
 require './action/music_switch'
 require './action/time_attack'
+require './action/time_recordlog'
 require './sprits/main_character'
 require './story/story1'
 require './story/story2'
@@ -49,10 +50,10 @@ btn_timer.scale_x = 0.3
 btn_timer.scale_y = 0.3
 btn_timer.z = +1
 
-btn_setting = Sprite.new(300, 0, Image.load("images/setting.png"))
-btn_setting.scale_x = 0.3
-btn_setting.scale_y = 0.3
-btn_setting.z = +2
+btn_setting = Sprite.new(750, 500, Image.load("images/setting.png"))
+btn_setting.scale_x = 0.2
+btn_setting.scale_y = 0.2
+btn_setting.z = +1
 
 # タイムアタック
 @atk_start = -1
@@ -65,6 +66,8 @@ btn_setting.z = +2
 
 @flo2_byou = 0
 @flo2_byou_cnt = 0
+
+@ranking = []
 
 # ストーリー別背景
 @cnt = 0
@@ -213,11 +216,12 @@ Window.loop do
     Window.draw_font_ex(340,100,"きつみん", font, color: C_WHITE)
     btn_story.draw()
     btn_timer.draw()
+    btn_setting.draw()
 
   when 1    # $chapter
     case $story
     when 1    # $story
-      main_char.hp = 100.0 # 破壊オブジェクトのHP
+      main_char.hp = 1000.0 # 破壊オブジェクトのHP
       if Input.mousePush?(M_LBUTTON)
         @cnt += 1
       end
@@ -458,8 +462,8 @@ Window.loop do
   when 4    # $chapter
   main_char.x = 1350
   main_char.y = 430
-  skinfont = Font.new(60)
-  Window.draw_font_ex(1180, 200, "現在適用されているスキン", skinfont)
+  skinfont = Font.new(45)
+  Window.draw_font_ex(900, 200, "現在適用中スキン", skinfont)
 
   # 画面に画像を配置
   skin = Image.loadTiles("./images/main_character5.png", 3, 4)
@@ -476,6 +480,9 @@ Window.loop do
   when 5    # $chapter
 
   write_name()
+
+  record_sort()
+
     
   if Input.key_push?(K_RETURN)
   File.open("./action/username", "w+", encoding: "utf-8") do |f|
@@ -485,7 +492,8 @@ Window.loop do
     name = f.read
     print "#{name} としてログイン"
   end
-  main_char.hp = 1000.0
+
+  main_char.hp = 1000.0     # hp
   $chapter = 6
   end
     Window.draw_font_ex(100,100, "名前を入力してください", font2, color: C_WHITE)
@@ -540,7 +548,7 @@ Window.loop do
       Window.draw_font_ex(100,100, "終了", font2, color: C_WHITE)
       Window.draw_font_ex(100,150, "クリアタイムは#{@byou}.#{@flo1_byou}#{@flo2_byou}です。", font2, color: C_WHITE)
 
-      @time_record = "#{@userName} : #{@byou}.#{@flo1_byou}#{@flo2_byou}"
+      @time_record = "#{@userName} #{@byou}.#{@flo1_byou}#{@flo2_byou}"
       sleep(3)
       $chapter = 7
     end
@@ -548,7 +556,9 @@ Window.loop do
   when 7    # $chapter
     Window.draw_font_ex(200,950, "タイムアタックを続けますか？「y」or「n」", font2, color: C_WHITE)
     Window.draw_font_ex(100,150, "クリアタイムは#{@byou}.#{@flo1_byou}#{@flo2_byou}です。", font2, color: C_WHITE)
+    @kekka = "#{@byou}.#{@flo1_byou}#{@flo2_byou}".to_f
     main_char.hp = 1000.0
+
 
     if Input.key_push?(K_Y)
       $chapter = 6
